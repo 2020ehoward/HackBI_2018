@@ -1,15 +1,26 @@
 package com.example.evanphoward.hackbi;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import android.widget.Toast;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 /**
  * Created by Evan Howard and Nishanth Alladi on 1/20/2018.
  */
 public class myGLSurfaceView extends GLSurfaceView {
 
+    private SensorEventListener sensorEventListener;
     MyGLRenderer myRender;
+    private SensorManager sensorManager;
+    private Sensor sensor;
+
 
     public myGLSurfaceView(Context context) {
         super(context);
@@ -23,6 +34,39 @@ public class myGLSurfaceView extends GLSurfaceView {
 
         // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+        sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        sensorEventListener = new SensorEventListener() {
+            float vx=0.5f,vy=0.5f,vz=0.5f;
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                if(event.values[0]>0.1 || event.values[1]>0.1 || event.values[2]>0.1) {
+                    vx = event.values[0];
+                    vy = event.values[1];
+                    vz = event.values[2];
+
+                    myRender.setRotx(vx);
+                    myRender.setRoty(vy);
+                    myRender.setRotz(vz);
+                    myRender.setmAngle(myRender.getmAngle()+0.4f);
+                }
+                else{
+                    myRender.setRotx(vx);
+                    myRender.setRoty(vy);
+                    myRender.setRotz(vz);
+                }
+
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+
+        };
+        sensorManager.registerListener(sensorEventListener,sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
