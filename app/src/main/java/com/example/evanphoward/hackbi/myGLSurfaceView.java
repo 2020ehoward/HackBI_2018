@@ -27,7 +27,7 @@ public class myGLSurfaceView extends GLSurfaceView {
 
 
     //private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
-    private static final float TOUCH_SCALE_FACTOR = 0.015f;
+    private static final float TOUCH_SCALE_FACTOR = 0.15f;
     private float mPreviousX;
     private float mPreviousY;
 
@@ -42,14 +42,13 @@ public class myGLSurfaceView extends GLSurfaceView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_MOVE:
+                if(x<mPreviousX || y>mPreviousY)
+                    myRender.setAngle(myRender.getmAngle()-(float)(Math.sqrt(Math.pow(x-mPreviousX,2)+Math.pow(y-mPreviousY,2))*TOUCH_SCALE_FACTOR));
+                else
+                    myRender.setAngle(myRender.getmAngle()+(float)(Math.sqrt(Math.pow(x-mPreviousX,2)+Math.pow(y-mPreviousY,2))*TOUCH_SCALE_FACTOR));
 
-                float dx = x - mPreviousX;
-                //subtract, so the cube moves the same direction as your finger.
-                //with plus it moves the opposite direction.
-                myRender.setX(myRender.getX() - (dx * TOUCH_SCALE_FACTOR));
 
-                float dy = y - mPreviousY;
-                myRender.setY(myRender.getY() - (dy * TOUCH_SCALE_FACTOR));
+
         }
 
         mPreviousX = x;

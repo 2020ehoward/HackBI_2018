@@ -261,10 +261,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mRotationMatrix, 0);
 
         //move the cube up/down and left/right
-        Matrix.translateM(mRotationMatrix, 0, mTransX, mTransY, 0);
+       // Matrix.translateM(mRotationMatrix, 0, mTransX, mTransY, 0);
 
         //mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrix, 0, mAngle, 0.4f, 1.0f, 0.6f);
+        Matrix.rotateM(mRotationMatrix, 0, mAngle, 1.0f, 1.0f, 1.0f);
 
         // combine the model with the view matrix
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mRotationMatrix, 0);
@@ -273,26 +273,28 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
 
         mPyramid.draw(mMVPMatrix);
-
-        //change the angle, so the cube will spin.
-        mAngle+=.4;
     }
 
-
-    //used the touch listener to move the cube up/down (y) and left/right (x)
-    public float getY() {
+    public float getmTransY() {
         return mTransY;
     }
 
-    public void setY(float mY) {
-        mTransY = mY;
+    public void setmTransY(float mTransY) {
+        this.mTransY = mTransY;
     }
 
-    public float getX() {
+    public float getmTransX() {
         return mTransX;
     }
 
-    public void setX(float mX) {
-        mTransX = mX;
+    public void setmTransX(float mTransX) {
+        this.mTransX = mTransX;
+    }
+
+    public float getmAngle() {
+        return mAngle;
+    }
+    public void setAngle(float mX) {
+        mAngle = mX;
     }
 }
