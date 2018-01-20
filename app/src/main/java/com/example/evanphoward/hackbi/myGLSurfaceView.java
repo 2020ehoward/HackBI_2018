@@ -5,7 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
 /**
- * Created by Seker on 2/23/2016.
+ * Created by Evan Howard and Nishanth Alladi on 1/20/2018.
  */
 public class myGLSurfaceView extends GLSurfaceView {
 
@@ -26,10 +26,10 @@ public class myGLSurfaceView extends GLSurfaceView {
     }
 
 
-    //private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
-    private static final float TOUCH_SCALE_FACTOR = 0.15f;
+    private static final float TOUCH_SCALE_FACTOR = 0.0015f;
     private float mPreviousX;
     private float mPreviousY;
+    private float mPreviousDist=-1;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -42,18 +42,39 @@ public class myGLSurfaceView extends GLSurfaceView {
 
         switch (e.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                if(x<mPreviousX || y>mPreviousY)
-                    myRender.setAngle(myRender.getmAngle()-(float)(Math.sqrt(Math.pow(x-mPreviousX,2)+Math.pow(y-mPreviousY,2))*TOUCH_SCALE_FACTOR));
-                else
-                    myRender.setAngle(myRender.getmAngle()+(float)(Math.sqrt(Math.pow(x-mPreviousX,2)+Math.pow(y-mPreviousY,2))*TOUCH_SCALE_FACTOR));
-
-
-
+                if(e.getPointerCount()==1) {
+                    if(mPreviousDist!=-1)
+                        mPreviousDist=-1;
+                    else {
+                        float dx = x - mPreviousX;
+                        float dy = y - mPreviousY;
+                        myRender.setX(myRender.getX() - (dx * TOUCH_SCALE_FACTOR * map(myRender)));
+                        myRender.setY(myRender.getY() - (dy * TOUCH_SCALE_FACTOR * map(myRender)));
+                    }
+                }
+                else if(e.getPointerCount()>1) {
+                    if(mPreviousDist==-1)
+                        mPreviousDist=dist(e);
+                    float dz = dist(e) - mPreviousDist;
+                    if(myRender.getZ()>-1.2 || dz<0)
+                        myRender.setZ(myRender.getZ() - (dz * TOUCH_SCALE_FACTOR));
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                mPreviousDist=dist(e);
         }
 
         mPreviousX = x;
         mPreviousY = y;
         return true;
+    }
+
+    private static float dist(MotionEvent e) {
+        return (float)(Math.sqrt(Math.pow(e.getX(0)-e.getX(1),2)+Math.pow(e.getY(0)-e.getY(1),2)));
+    }
+
+    private static float map(MyGLRenderer myRender) {
+        return (myRender.getZ()+1.2f) * (4.5f) / (11.2f) + 0.5f;
     }
 
 }
