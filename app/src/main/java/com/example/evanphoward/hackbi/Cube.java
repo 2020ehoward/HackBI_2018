@@ -13,6 +13,7 @@ public class Cube {
     private int mProgramObject;
     private int mMVPMatrixHandle;
     private int mColorHandle;
+    private boolean isFloor;
     private FloatBuffer mVertices;
 
     //initial sizes of the prism.  set here, so it is easier to change later.
@@ -110,6 +111,8 @@ public class Cube {
     //finally some methods
     //constructor
     public Cube(float length, float width, float height, float[] color, float x, float y, float z, int shade) {
+        if(length>15 && width>15)
+            isFloor=true;
         this.length=length;
         this.width=width;
         this.height=height;

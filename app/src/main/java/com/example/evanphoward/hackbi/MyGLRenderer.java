@@ -128,7 +128,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        GLES30.glClearColor(0.65f, 0.19f, 0.19f, 0.9f);
+        GLES30.glClearColor(0.5294f, 0.8078f, 0.9804f, 0.9f);
         //initialize the cube code for drawing.
         this.length=17.55f;
         this.height=16.0f;
@@ -138,8 +138,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         cubes.add(new Cube(0.1f,DEPTH,height/2,colors[3],length,height/2,0f,1));
         cubes.add(new Cube((length/2)+0.1f,DEPTH,0.1f,colors[3],length/2,height,0f,2));
         cubes.add(new Cube(0.1f,DEPTH,height/2,colors[3],0f,height/2,0f,3));
-        cubes.add(new Cube((length/2)+0.1f,0.1f,(height/2)+0.1f,myColor.cyan(),length/2,height/2,DEPTH,0));
-        cubes.add(new Cube(0.3f,DEPTH,0.3f,myColor.green(),length-0.8f,height/2,0.3f,0));
+        cubes.add(new Cube((length/2)+0.1f,0.1f,(height/2)+0.1f,myColor.green(),length/2,height/2,DEPTH,0));
+        cubes.add(new Cube(0.3f,DEPTH,0.3f,myColor.yellow(),length-0.8f,height/2,0.3f,0));
 
 
         infile.nextLine();
@@ -148,6 +148,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             cubes.add(new Cube((Float.parseFloat(vals[0])/2.0f),DEPTH, Float.parseFloat(vals[2])/2.0f,colors[3],Float.parseFloat(vals[4]), Float.parseFloat(vals[5]),0f,Integer.parseInt(vals[7])));
         }
         //if we had other objects setup them up here as well.
+    }
+
+    private float dist(Cube c) {
+        return (float)(Math.sqrt(Math.pow(c.getX()-((length/2)+0.1),2)+Math.pow(c.getY()-((height/2)+0.1),2)));
     }
 
     @Override
@@ -173,17 +177,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES30.glEnable(GLES30.GL_DEPTH_TEST);
 
         for(int i=0;i<cubes.size();i++) {
+
             // Set the camera position (View matrix)  note Matrix is an include, not a declared method.
-            Matrix.setLookAtM(mViewMatrix, 0, 0f, 0f, -3, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+            Matrix.setLookAtM(mViewMatrix, 0, 0.0f, 0.0f, -3f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
 
             // Create a rotation and translation for the cube
             Matrix.setIdentityM(mRotationMatrix, 0);
 
-            //move the cube up/down and left/right
-                Matrix.translateM(mRotationMatrix, 0, mTransX-cubes.get(i).getX()+0.7f, mTransY+cubes.get(i).getY()-1.2f, mTransZ);
-
             //mangle is how fast, x,y,z which directions it rotates.
+            Matrix.translateM(mRotationMatrix, 0, 0,0, mTransZ);
+
+
             Matrix.rotateM(mRotationMatrix, 0, mAngle, rotx, roty, rotz);
+
+            Matrix.translateM(mRotationMatrix, 0, mTransX-cubes.get(i).getX()+0.7f, mTransY+cubes.get(i).getY()-1.2f, 0);
+
+
+            //move the cube up/down and left/right
+
+
 
             // combine the model with the view matrix
             Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mRotationMatrix, 0);
