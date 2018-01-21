@@ -19,9 +19,9 @@ public class myColor {
 
     static float[] green() {
         return new float[]{
-                Color.red(Color.GREEN) / 255f,
-                Color.green(Color.GREEN) / 255f,
-                Color.blue(Color.GREEN) / 255f,
+                Color.red(Color.GREEN) / 255f * 0.5f,
+                Color.green(Color.GREEN) / 255f * 0.5f,
+                Color.blue(Color.GREEN) / 255f * 0.5f,
                 1.0f
         };
     }
