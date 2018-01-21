@@ -25,9 +25,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float mTransY=0;
     private float mTransX=0;
     private float mTransZ=0;
-    private float rotx=0;
-    private float roty=0;
-    private float rotz=0;
+    private float rotx=0.4f;
+    private float roty=1.0f;
+    private float rotz=0.6f;
     private static final float Z_NEAR = 1f;
     private static final float Z_FAR = 40f;
 
@@ -36,8 +36,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mProjectionMatrix = new float[16];
     private final float[] mViewMatrix = new float[16];
     private final float[] mRotationMatrix = new float[16];
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
     //
     Context context;
     public MyGLRenderer(Context context) {
@@ -143,7 +141,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.translateM(mRotationMatrix, 0, mTransX, mTransY, mTransZ);
 
         //mangle is how fast, x,y,z which directions it rotates.
-        Matrix.rotateM(mRotationMatrix, 0, mAngle, rotx, roty, rotz);
+        Matrix.rotateM(mRotationMatrix, 0, mAngle, rotx,roty,rotz);
 
         // combine the model with the view matrix
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mRotationMatrix, 0);
@@ -155,7 +153,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 
         //change the angle, so the cube will spin.
-        mAngle+=.4;
+        //mAngle+=.4;
     }
 
     public float getY() {
